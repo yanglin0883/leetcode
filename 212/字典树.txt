@@ -1,0 +1,80 @@
+class Solution {
+    public List<String> findWords(char[][] board, String[] words) {
+        List<String> outWords = new ArrayList<String>();
+
+        TrieNode parent = buildTrie(words);
+
+        for(int i=0;i<board.length;i++)
+        {
+            for(int j=0;j<board[0].length;j++)
+            {
+                dfs(i,j,board,parent,outWords);
+            }
+        }
+        return outWords;
+    }
+    
+    public TrieNode buildTrie(String words[])
+    {
+        TrieNode root = new TrieNode();
+        for(String str:words)
+        {
+            TrieNode p = root;
+            for(char c:str.toCharArray())
+            {
+                int i = c-'a';
+
+                if(p.next[i] == null)
+                    p.next[i] = new TrieNode();
+                p =  p.next[i];
+            }
+            p.word = str;
+        }
+        return root;
+    }
+    
+     public void dfs(int i, int j,char[][] board,TrieNode p,List<String> words)
+    {
+        if(!isSafe(i,j,board,p))
+        {
+            return;
+        }
+
+        int[] a = new int[]{ 0,  0, -1, +1 };
+        int[] b = new int[]{-1, +1,  0,  0 };
+
+        char c = board[i][j];
+        p = p.next[c - 'a'];
+
+        if(p.word != null && !words.contains(p.word))
+        {
+            words.add(p.word);
+        }
+
+        board[i][j] = '#';
+        for(int k=0;k<=3;k++)
+        {
+            dfs(i+a[k],j+b[k],board,p, words);
+        }
+
+        board[i][j] = c;
+    }
+    
+    public boolean isSafe(int i,int j,char[][] board,TrieNode root)
+    {
+        if(i>=0 && i < board.length && j>=0 && j < board[0].length &&
+            board[i][j] != '#')
+        {
+            char c = board[i][j];
+
+            return root.next[c-'a'] != null ? true : false;
+        }
+        return false;
+    }
+    
+    static class TrieNode
+    {
+        TrieNode[] next = new TrieNode[26];
+        String word = null;
+    }
+}

@@ -1,0 +1,29 @@
+class Solution {
+	    public int maxFreq(String s, int maxLetters, int minSize, int maxSize) {
+	    	int n = s.length();
+	    	Map<String, Integer> map = new HashMap<>();
+	        for(int i = 0;i < n;i++){
+	        	for(int j = minSize;j <= maxSize && i+j <= n;j++){
+	        		String ss = s.substring(i, i+j);
+	        		int f = 0;
+	        		for(char c : ss.toCharArray()){
+	        			f |= 1<<c;
+	        		}
+	        		if(Integer.bitCount(f) <= maxLetters){
+	        			if(!map.containsKey(ss)){
+	        				map.put(ss, 1);
+	        			}else{
+	        				map.put(ss, map.get(ss) + 1);
+	        			}
+	        		}else{
+	        			break;
+	        		}
+	        	}
+	        }
+	        int ret = 0;
+	        for(int v : map.values()){
+	        	ret = Math.max(ret, v);
+	        }
+	        return ret;
+	    }
+	}	

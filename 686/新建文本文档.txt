@@ -1,0 +1,24 @@
+class Solution {
+    public int repeatedStringMatch(String A, String B) {
+        if(B==null||B.length()==0) return 0;
+        if(A==null||A.length()==0) return -1;
+        int la = A.length();
+        int lb = B.length();
+        int count = 0;
+        StringBuilder nA = new StringBuilder();   
+        if(A.equals(B)) return 1;
+        T1:for(int i=0;i<lb/la+3;i++){
+            nA.append(A);
+            count++; 
+            //System.out.println(count+"  "+nA.toString());
+            T2:for(int a=0;a<count*la;a++){
+                for(int b=0;b<lb;b++){
+                    if(a+b>=nA.length()) continue T1;
+                    if(nA.charAt(a+b) != B.charAt(b)) continue T2;
+                }
+                return count;
+            }
+        }
+        return -1;
+    }
+}
